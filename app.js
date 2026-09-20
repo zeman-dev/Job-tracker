@@ -7,6 +7,8 @@ import { logger } from './src/middleware/logger.js';
 import { errorHandler } from './src/middleware/errorHandler.js';
 import { notFoundHandler } from './src/middleware/notFoundHandler.js';
 import { errors } from 'celebrate';
+import applicationRouter from './src/routes/applicationsRoutes.js';
+import { devAuth } from './src/middleware/devAuth.js';
 
 const app = express();
 
@@ -20,8 +22,9 @@ const app = express();
  app.use(express.json());
 
  // {ROUTES} //
+ app.use('/applications', devAuth, applicationRouter);
 
-
+ app.use(applicationRouter);
 
  // {ERROR MIDLEWARE} //
 
