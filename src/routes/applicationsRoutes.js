@@ -1,12 +1,18 @@
 import { celebrate } from "celebrate";
-import { createApplication, 
+import { 
+    createApplication, 
     deleteApplication, 
     getApplicationById, 
     getApplications, 
     updateApplication } from "../controllers/applicationsController.js";
 
 import {Router} from "express";
-import { applicationIdParamsSchema, createApplicationSchema, getAllApplicationsSchema, updateApplicationSchema } from "../validations/applicationValidation.js";
+import { 
+    applicationIdParamsSchema, 
+    createApplicationSchema, 
+    getAllApplicationsSchema, 
+    updateApplicationSchema, 
+    updateApplicationStatusSchema} from "../validations/applicationValidation.js";
 
 
 const router = Router();
@@ -26,7 +32,7 @@ router.delete("/applications/:applicationId", celebrate(applicationIdParamsSchem
 
 // {/APPLICATION/:ID/STATUS} //
 
-router.patch("/applications/:applicationId/status", () =>{});
+router.patch("/applications/:applicationId/status", celebrate(updateApplicationStatusSchema),updateApplication);
 
 // {AUTH} // 
 router.post("/auth/register", () => {});
