@@ -1,37 +1,71 @@
 import createHttpError from 'http-errors';
 import { Application } from '../models/application.js';
 
-export const getApplications = async (req, res) => {
-  const applicationQuery = await Application.find();
 
-  res.status(200).json({
-    applicationQuery,
-  });
+// {GET ALL} //
+
+export const getApplications = async (req, res) => {
+  const {search, source, workFormat} = req.query;
+  const applicationQuery = Application.find({userId: res.locals.userId});
+
+  if(source){
+    applicationQuery.where("source").equals(source);
+  }
+  if(workFormat){
+    applicationQuery.where("workFormat").equals(workFormat);
+  }
+  if(search){
+    applicationQuery.where({
+      $or: [
+        {role: {$regex: search, $options: "i"}},
+        {company: {$regex: search, $options: "i"},}
+      ],
+    });
+  }
+
+const allApplications = await applicationQuery
+
+  res.status(200).json(allApplications);
 };
+
+// {GET BY ID} //
 
 export const getApplicationById = async (req, res) => {
   const { applicationId } = req.params;
-  const application = await Application.findOne({ _id: applicationId });
+  const application = await Application.findOne({
+     _id: applicationId, 
+     userId: res.locals.userId 
+    });
   if (!application) {
     throw createHttpError(404, 'Application not found');
   }
 
-  res.status(200).json({ application });
+  res.status(200).json(application);
 };
 
+// {CREATE} //
+
 export const createApplication = async (req, res) => {
-    console.log(res.locals.userId)
-  const application = await Application.create({...req.body, userId: res.locals.userId});
+  const application = await Application.create({
+    ...req.body, 
+    userId: res.locals.userId
+  });
 
   res.status(201).json(application);
 };
 
+// {UPDATE} //
+
 export const updateApplication = async (req, res) => {
   const { applicationId } = req.params;
-  const application = await Application.findOneAndUpdate(
-    { _id: applicationId },
+  const application = await Application.findOneAndUpdate({
+     _id: applicationId, 
+     userId: res.locals.userId 
+    },
     req.body,
-    { returnDocument: 'after' },
+    { returnDocument: 'after',
+      runValidators: true,
+     },
   );
   if (!application) {
     throw createHttpError(404, 'Application not found');
@@ -39,11 +73,15 @@ export const updateApplication = async (req, res) => {
   res.status(200).json(application);
 };
 
+// {DELETE} //
+
 export const deleteApplication = async (req, res) => {
   const { applicationId } = req.params;
-  const application = await Application.findOneAndDelete({
-    _id: applicationId,
-  });
+  const application = await Application.findOneAndDelete({ 
+    _id: applicationId, 
+    userId: res.locals.userId 
+  },
+  );
   if (!application) {
     throw createHttpError(404, 'Application not found');
   }

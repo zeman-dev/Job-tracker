@@ -22,9 +22,7 @@ const app = express();
  app.use(express.json());
 
  // {ROUTES} //
- app.use('/applications', devAuth, applicationRouter);
-
- app.use(applicationRouter);
+ app.use(devAuth, applicationRouter);
 
  // {ERROR MIDLEWARE} //
 
