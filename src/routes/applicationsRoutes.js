@@ -13,8 +13,6 @@ import {
     getAllApplicationsSchema, 
     updateApplicationSchema, 
     updateApplicationStatusSchema} from "../validations/applicationValidation.js";
-import { loginSchema, registerSchema } from "../validations/authValidation.js";
-import { loginUser, registerUser } from "../controllers/authControllers.js";
 
 
 const router = Router();
@@ -36,13 +34,5 @@ router.delete("/applications/:applicationId", celebrate(applicationIdParamsSchem
 
 router.patch("/applications/:applicationId/status", celebrate(updateApplicationStatusSchema),updateApplication);
 
-// {AUTH} // 
-router.post("/auth/register", celebrate(registerSchema), registerUser);
-
-router.post("/auth/login", celebrate(loginSchema), loginUser);
-
-router.post("/auth/logout", () => {});
-
-router.get("/auth/me", () => {})
 
 export default router;

@@ -8,7 +8,9 @@ import { errorHandler } from './src/middleware/errorHandler.js';
 import { notFoundHandler } from './src/middleware/notFoundHandler.js';
 import { errors } from 'celebrate';
 import applicationRouter from './src/routes/applicationsRoutes.js';
+import authRouter from './src/routes/AuthRoutes.js';
 import { devAuth } from './src/middleware/devAuth.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -20,9 +22,13 @@ const app = express();
  app.use(logger());
  
  app.use(express.json());
+ 
+ app.use(cookieParser());
 
  // {ROUTES} //
  app.use(devAuth, applicationRouter);
+
+ app.use(devAuth, authRouter);
 
  // {ERROR MIDLEWARE} //
 
