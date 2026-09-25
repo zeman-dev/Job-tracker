@@ -12,5 +12,4 @@ export function errorHandler(err, req, res, next) {
   res.status(500).json({
     message: isProd ? err.message : err.stack,
   }); 
-  next();
 }

@@ -17,11 +17,15 @@ export const applicationIdParamsSchema = {
   }),
 };
 
+// { CONTACTS BLOCK } //
+
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(15).trim().required(),
   role: Joi.string().max(40).allow(''),
   email: Joi.string().email().required().max(40),
 });
+
+// { GET ALL} //
 
 export const getAllApplicationsSchema = {
   [Segments.QUERY]: Joi.object({
@@ -30,6 +34,8 @@ export const getAllApplicationsSchema = {
     workFormat: Joi.string().valid(...WORK_FORMATS),
   }),
 };
+
+// { CREATE } //
 
 export const createApplicationSchema = {
   [Segments.BODY]: Joi.object({
@@ -53,9 +59,11 @@ export const createApplicationSchema = {
   }),
 };
 
+// { UPDATE APPLICATION } //
+
 export const updateApplicationSchema = {
   [Segments.BODY]: Joi.object({
-    notes: Joi.string().max(50).allow(''),
+    notes: Joi.string().max(250).allow(''),
     jobUrl: Joi.string()
       .max(70)
       .trim()
@@ -67,6 +75,8 @@ export const updateApplicationSchema = {
   }).min(1),
   ...applicationIdParamsSchema,
 };
+
+// { UPDATE STATUS } //
 
 export const updateApplicationStatusSchema = {
   [Segments.BODY]: Joi.object(
