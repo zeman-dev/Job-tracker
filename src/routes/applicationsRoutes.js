@@ -13,9 +13,12 @@ import {
     getAllApplicationsSchema, 
     updateApplicationSchema, 
     updateApplicationStatusSchema} from "../validations/applicationValidation.js";
+import { authenticate } from "../middleware/authenticate.js";
 
 
 const router = Router();
+
+router.use("/applications", authenticate);
 
 // {/APPLICATION} //
 router.get("/applications", celebrate(getAllApplicationsSchema), getApplications);

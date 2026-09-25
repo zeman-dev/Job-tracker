@@ -38,7 +38,7 @@ export const createApplicationSchema = {
       .trim(),
     company: Joi.string().trim().required().max(30).min(2),
     role: Joi.string().trim().required().min(5).max(40),
-    notes: Joi.string().max(50).allow(''),
+    notes: Joi.string().max(250).allow(''),
     source: Joi.string().valid(...SOURCES),
     jobUrl: Joi.string()
       .max(70)

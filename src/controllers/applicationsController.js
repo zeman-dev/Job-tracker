@@ -6,7 +6,7 @@ import { Application } from '../models/application.js';
 
 export const getApplications = async (req, res) => {
   const {search, source, workFormat} = req.query;
-  const applicationQuery = Application.find({userId: res.locals.userId});
+  const applicationQuery = Application.find({userId: req.user._id});
 
   if(source){
     applicationQuery.where("source").equals(source);
@@ -34,7 +34,7 @@ export const getApplicationById = async (req, res) => {
   const { applicationId } = req.params;
   const application = await Application.findOne({
      _id: applicationId, 
-     userId: res.locals.userId 
+     userId: req.user._id 
     });
   if (!application) {
     throw createHttpError(404, 'Application not found');
@@ -48,7 +48,7 @@ export const getApplicationById = async (req, res) => {
 export const createApplication = async (req, res) => {
   const application = await Application.create({
     ...req.body, 
-    userId: res.locals.userId
+    userId: req.user._id
   });
 
   res.status(201).json(application);
@@ -60,7 +60,7 @@ export const updateApplication = async (req, res) => {
   const { applicationId } = req.params;
   const application = await Application.findOneAndUpdate({
      _id: applicationId, 
-     userId: res.locals.userId 
+     userId: req.user._id 
     },
     req.body,
     { returnDocument: 'after',
@@ -79,7 +79,7 @@ export const deleteApplication = async (req, res) => {
   const { applicationId } = req.params;
   const application = await Application.findOneAndDelete({ 
     _id: applicationId, 
-    userId: res.locals.userId 
+    userId: req.user._id 
   },
   );
   if (!application) {
