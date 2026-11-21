@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import TanstackProvider from "@/components/TanStackProvider/TanStackProvider";
+import { Header } from "@/components/Header/Header";
 
 
 export const metadata: Metadata = {
@@ -12,7 +14,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <TanstackProvider>
+          <Header/>
+        {children}
+        </TanstackProvider>
+        </body>
     </html>
   );
 }
